@@ -138,6 +138,6 @@ function toRadians(degrees) {
 
 $('#expand-icon').click(function() {
   $('#message-banner').css('display','none');
-  $('#message-layer').css('display','block');
+  if($('#expand-icon img').attr('src') == 'img/down.png') {
   $('#map-layer').css('height', '40%');
 });
