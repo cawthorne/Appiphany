@@ -2,8 +2,7 @@
   padding: 0;
   margin: 0;
 }
-html,
-body {
+html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -13,11 +12,37 @@ body {
 
 .popup {
   color: #000000;
+  width: 150px;
+  height: 50px;
+  font-family: "Open Sans", sans-serif;
+  font-size: 1.2em;
+  font-weight: 700;
+  overflow: hidden;
+}
+
+.popup #profile_img {
+  width: 50px;
+  height: 50px;
+  float: left;
+  margin: 0 5px 0 0;
+}
+
+.popup #profile_name {
+  width: 95px;
+  height: 50px;
+  float: left;
+  line-height: 25px;
+}
+
+.popup div img {
+  width: 100%;
+  height: 100%;
 }
 
 #map-layer {
   width: 100%;
   height: calc(100% - 75px);  /*75px for message-banner*/
+  /*height: 40%;*/
   position: relative;
   z-index: 0;
 }
@@ -31,17 +56,18 @@ body {
 
 #message-short {
   font-size: 1.2em;
-  width: calc(100% - 75px); /*75 px for expand-icon width + margin*/
+  width: 100%;
   height: calc(100% - 10px);  /*100% - 10px top margin */
   float: left;
   margin: 10px 0 0 10px;
 }
 
 #expand-icon {
-  width: 50px;
+  position: absolute;
+  width: 40px;
   height: auto;
-  float: left;
-  margin: 10px 0 0 0;
+  right: 15px;
+  top: 15px;
 }
 
 #expand-icon img {
@@ -70,3 +96,51 @@ body {
   z-index: 200;
 }
 
+/* message review page */
+
+#message-layer {
+  display: none;
+  width: 100%;
+  height: 60%;
+  background-color: #000000;
+}
+
+#thumb-section {
+  width: 100%;
+  height: 50%;
+  background-color: #3b3b38;
+  font-family: "Raleway", sans-serif;
+  font-size: 1.2em;
+}
+
+#thumb-icon {
+  position: relative;
+  top: 20px;
+  width: 100px;
+  height: auto;
+  margin: auto auto;
+}
+
+#post-time {
+  position: relative;
+  top: 30px;
+  width: 100%;
+  height: auto;
+  margin: 10px auto 0 auto;
+  text-align: center;
+}
+
+#thumb-icon img {
+  width: 100%;
+  height: 100%;
+}
+
+#text-section {
+  width: calc(100% - 30px);
+  height: 50%;
+  background-color: #ffffff;
+  color: #000000;
+  font-size: 1.3em;
+  font-weight: 500;
+  padding: 15px 15px 15px 15px;
+}
