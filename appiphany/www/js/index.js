@@ -99,7 +99,15 @@ function toRadians(degrees) {
 };
 
 $('#expand-icon').click(function() {
-  $('#message-banner').css('display','none');
-  $('#message-layer').css('display','block');
-  $('#map-layer').css('height', '40%');
+  if($('#expand-icon img').attr('src') == 'img/down.png') {
+    $('#message-banner').slideUp();
+    $('#message-layer').slideDown();
+    $('#map-layer').css('height', '40%');
+    $('#expand-icon img').attr('src', 'img/up.png');
+  } else {
+    $('#message-banner').slideDown();
+    $('#message-layer').slideUp();
+    $('#map-layer').css('height', 'calc(100% - 75px)');
+    $('#expand-icon img').attr('src', 'img/down.png');
+  }
 });
