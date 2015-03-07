@@ -2,7 +2,10 @@
 var map;
 
 //https://www.mapbox.com/developers/api/
+
 var accToken = '?access_token=pk.eyJ1IjoibWMxMzgxOCIsImEiOiI4Tlp2cFlBIn0.reMspV4lEYawDlSZ6U1fqQ';
+var markers = new Array();
+
 map = L.map('map-layer', {
     attributionControl: false,
     zoomControl:false,
@@ -20,12 +23,31 @@ L.tileLayer('http://{s}.tiles.mapbox.com/v4/mc13818.l2a71g35/{z}/{x}/{y}.png'.co
 		unloadInvisibleTiles: false
 }).addTo(map);
 
-map.on('click', function(e) {
-    addMarker(e.latlng.lat, e.latlng.lng, "Hello, world!");
+var markerIcon = L.icon({
+    iconUrl: 'img/marker.png',
+    iconSize: [25, 25],
+    iconAnchor: [12.5, 12.5],
+    popupAnchor: [0, -15],
 });
-    
-function addMarker(lat, lng, message) {
-  L.marker([lat, lng]).addTo(map)
-    .bindPopup('' + message)
+
+map.on('click', function(e) {
+    createMarker(e.latlng.lat, e.latlng.lng, "Hello, world!");
+});
+
+function createMarker(latitude, longitude, message) {
+  var m = {
+    lat: latitude,
+    lng: longitude,
+    msg: message
+  };
+  markers.push(m);
+  addMarkerToMap(m.lat, m.lng, m.msg);
+}
+
+function addMarkerToMap(lat, lng, message) {
+  m = L.marker([lat, lng], {icon: markerIcon});
+  m.addTo(map)
+    .bindPopup('<div class="popup">'+message+'<\div>')
     .openPopup();
 }
+
