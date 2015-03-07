@@ -3,8 +3,11 @@ var map;
 
 //https://www.mapbox.com/developers/api/
 
+
 var accToken = '?access_token=pk.eyJ1IjoibWMxMzgxOCIsImEiOiI4Tlp2cFlBIn0.reMspV4lEYawDlSZ6U1fqQ';
 var markers = new Array();
+
+var lastCentre = [51.396, -2.298];
 
 map = L.map('map-layer', {
     attributionControl: false,
@@ -34,7 +37,7 @@ map.on('click', function(e) {
     createMarker(e.latlng.lat, e.latlng.lng, "Hello, world!");
 });
 
-function createMarker(latitude, longitude, message) {
+function createMarker(latitude, longitude, type, message) {
   var m = {
     lat: latitude,
     lng: longitude,
@@ -51,3 +54,22 @@ function addMarkerToMap(lat, lng, message) {
     .openPopup();
 }
 
+function getData(){
+    
+    var domain ='https://appiphany.herokuapp.com';
+
+    var box = {
+      bbox: map.getBounds().toBBoxString()
+    };
+    var url = domain + L.Util.extend(L.Util.getParamString(parameters), box);
+
+    $.ajax({
+        url: url, success: function(result){
+        for(var i =0;i < result.length-1;i++)
+{
+  var item = itemData[i];
+  addData(item);
+}
+    }});
+    });
+};
