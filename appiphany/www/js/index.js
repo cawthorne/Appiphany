@@ -34,7 +34,7 @@ map.on('click', function(e) {
     createMarker(e.latlng.lat, e.latlng.lng, "Mike Christensen", "Hello, World!");
 });
 
-map.on('move', popupCenterMarker);
+map.on('moveend', popupCenterMarker);
 
 function createMarker(latitude, longitude, _name, message) {
   leaflet_m = addMarkerToMap(latitude, longitude, _name);
@@ -100,7 +100,7 @@ function toRadians(degrees) {
 
 $('#expand-icon').click(function() {
   if($('#expand-icon img').attr('src') == 'img/down.png') {
-    $('#message-banner').slideUp();
+    $('#message-banner').css('display','none');
     $('#message-layer').slideDown();
     $('#map-layer').css('height', '40%');
     $('#expand-icon img').attr('src', 'img/up.png');

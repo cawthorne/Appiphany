@@ -54,12 +54,32 @@ html, body {
   z-index: 100;
 }
 
+#banner-thumb {
+  width: 40px;
+  height: auto;
+  margin: 20px 0 0 10px; 
+  float: left;
+}
+
+#banner-thumb img{
+  width: 100%;
+  height: 100%;
+}
+
 #message-short {
   font-size: 1.2em;
-  width: 100%;
+  /*  Width calc:
+   *  40px  banner-thumb width
+   *  10px  banner-thumb margin
+   *  40px  expand-icon width
+   *  15px  expand-icon right offset
+   *  10px  message-short margin
+   */
+  width: calc(100% - 40px - 10px - 40px - 15px - 10px);
   height: calc(100% - 10px);  /*100% - 10px top margin */
   float: left;
   margin: 10px 0 0 10px;
+  overflow:hidden;
 }
 
 #expand-icon {
