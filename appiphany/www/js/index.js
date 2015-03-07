@@ -3,9 +3,9 @@ var map;
 
 //https://www.mapbox.com/developers/api/
 
+
 var accToken = '?access_token=pk.eyJ1IjoibWMxMzgxOCIsImEiOiI4Tlp2cFlBIn0.reMspV4lEYawDlSZ6U1fqQ';
-var markers = new Array();
-var leaflet_markers = new Array();
+var markers = new Object();
 
 map = L.map('map-layer', {
     attributionControl: false,
@@ -36,16 +36,23 @@ map.on('click', function(e) {
 
 map.on('moveend', popupCenterMarker);
 
-function createMarker(latitude, longitude, _name, message) {
-  leaflet_m = addMarkerToMap(latitude, longitude, _name);
-  var m = {
-    lat: latitude,
-    lng: longitude,
-    name: _name,
-    msg: message,
-    leaflet_marker: leaflet_m
-  };
-  markers.push(m);
+map.on('moveend', function(){
+    getData();
+});
+
+function createMarker(latitude, longitude, _name, type, message, id) {
+	
+	if (!markers.hasOwnProperty(id)) {
+		leaflet_m = addMarkerToMap(latitude, longitude, _name);
+		var m = {
+			lat: latitude,
+			lng: longitude,
+			name: _name,
+			msg: message,
+			leaflet_marker: leaflet_m
+		};
+		markers[id] = m;
+	}
 }
 
 function addMarkerToMap(lat, lng, name) {
@@ -57,11 +64,34 @@ function addMarkerToMap(lat, lng, name) {
 }
 
 function popupCenterMarker() {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].leaflet_marker.closePopup();
+  for (var m in markers) {
+    m.leaflet_marker.closePopup();
   }
-  getCenterMarker().leaflet_marker.openPopup();
+  
+  var centre = getCenterMarker();
+  if (centre){
+	  centre.leaflet_marker.openPopup();
+  }
 }
+
+function getData(){
+    
+    var domain ='https://appiphany.herokuapp.com';
+
+    var box = {
+      bbox: map.getBounds().toBBoxString()
+    };
+    var url = domain + L.Util.getParamString(box);
+
+    $.ajax({
+        url: url, success: function(result){
+        for(var i =0;i < result.length-1;i++)
+	{
+		var item = itemData[i];
+		createMarker(item.lat, item.lng, item.user_id, item.vote, item.text, item.id);
+	}
+    }});
+};
 
 function calcDistance(p1, p2)  {
   //http://www.movable-type.co.uk/scripts/latlong.html
@@ -82,15 +112,23 @@ function calcDistance(p1, p2)  {
 function getCenterMarker() {
   var center = map.getCenter();
   var min_i = 0;
-  var min_dist = calcDistance(center,markers[0]);
-  for (var i = 1; i < markers.length; i++) {
-    var dist = calcDistance(center,markers[i]);
+   var min_dist;
+   var centreMarker;
+  for (var first in markers) {
+	min_dist = calcDistance(center,first);
+    centreMarker = first;
+	break;
+}
+
+  for (var m in markers){
+    var dist = calcDistance(center,m);
     if(dist < min_dist) {
+		centreMarker = m;
       min_dist = dist;
       min_i = i;
     }
   }
-  return markers[min_i];
+  return centreMarker;
 }
 
 // Converts from degrees to radians.
