@@ -19,3 +19,13 @@ L.tileLayer('http://{s}.tiles.mapbox.com/v4/mc13818.l2a71g35/{z}/{x}/{y}.png'.co
     detectRetina: true,
 		unloadInvisibleTiles: false
 }).addTo(map);
+
+map.on('click', function(e) {
+    addMarker(e.latlng.lat, e.latlng.lng, "Hello, world!");
+});
+    
+function addMarker(lat, lng, message) {
+  L.marker([lat, lng]).addTo(map)
+    .bindPopup('' + message)
+    .openPopup();
+}
