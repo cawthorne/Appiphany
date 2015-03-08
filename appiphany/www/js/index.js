@@ -27,7 +27,7 @@ function initMap() {
       attributionControl: false,
       zoomControl:false,
       center: [51.455042, -2.603457],
-      zoom: 14,
+      zoom: 15,
       minZoom: 8
   });
   navigator.geolocation.getCurrentPosition(onSuccess, onError);
