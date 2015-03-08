@@ -35,7 +35,7 @@ $('#submit-button').click(function() {
   lng: userPos.lng,
   name: userName,
   id: _id,
-  msg: $('#message-input').text(),
+  msg: $('#message-input').val(),
   leaflet_marker: leaflet_m
 };
 $('#add-message-layer').slideUp();
@@ -111,7 +111,7 @@ function popupCenterMarker() {
 	  centre.leaflet_marker.openPopup();
     openmarker = centre;
     $('#message-short').text(centre.msg);
-    $('.message-section').text(centre.msg);
+    $('#message').text(centre.msg);
   }
 }
 
