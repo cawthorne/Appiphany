@@ -58,19 +58,13 @@ function initMap() {
 }
 
 function updateHeat() {
-  console.log(markers);
   for(var m in markers) {
     if(markers[m].vote == 1) {
       heat_red.addLatLng(L.latLng(markers[m].lat, markers[m].lng));
     } else {
       heat_green.addLatLng(L.latLng(markers[m].lat, markers[m].lng));
     }
-    //console.log("" + markers[m].lat + " , " + markers[m].lng);
   }
-  
-  //heat.addLatLng(L.latLng(51.460180, -2.604050));
-  //heat.addLatLng(L.latLng(51.462854, -2.559161));
-  //heat.addLatLng(L.latLng(51.469163, -2.624478));
 }
 
 $('#signin-button').click(function() {
@@ -177,6 +171,7 @@ function updateMessageBanner(m) {
   $('#message').text(m.msg);
   $('#profile-name').text(userName);
   $('#post-time').text('Posted '+m.age+' minutes ago');
+  alert(m.vote);
 }
 
 function deleteNote(id){
@@ -203,7 +198,7 @@ function getData(){
     url: url, dataType: 'json', success: function(result){
     for(var i in result.data){
       var item = result.data[i];
-      createMarker(item.lat, item.lng, item.user_name, item.vote, item.text, item.id);
+      createMarker(item.lat, item.lng, item.date, item.user_name, item.vote, item.text, item.id);
     }
     //popupCenterMarker();
     updateHeat();
