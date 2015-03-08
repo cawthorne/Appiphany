@@ -1,0 +1,74 @@
+@media only screen and (max-width: 320px) {
+  #banner-layer {
+    height: 60px;
+  }
+  #map-layer {
+    height: calc(100% - 60px);  /*80px for banner-layer*/
+  }
+  #banner-thumb {
+    width: 25px;
+  }
+  #message-short {
+    font-size: 1em;
+  }
+  #control-icon {
+    width: 25px;
+  }
+  
+  .title {
+    font-size: 1.4em;
+  }
+  
+  .centered-title {
+    font-size: 1em;
+  }
+  
+  .main-graphic {
+    width: 70px;
+  }
+  
+  .message-section  {
+    font-size: 1em;
+  }
+  
+  #profile-name {
+    font-size: 1.5em;
+    top: 10px;
+  }
+  
+  #profile-message-section  {
+    height: 25%
+  }
+  
+  #thumb1 {
+    width: 50px;
+    margin: 10px 0 0 50px;
+  }
+  
+  #thumb2 {
+    width: 50px;
+    margin: 10px 50px 0 0;
+  }
+  
+  #submit-button {
+    height: 50px;
+    line-height: 50px;
+  }
+}
+
+@media only screen and (max-height: 420px) {
+  #signin-button, #slogan {
+    display: none;
+  }
+  
+  .main-section {
+    height: 150px;
+  }
+  
+}
+
+@media only screen and (max-height: 450px) {
+  #thumb1, #thumb2, #submit-button {
+    display: none;
+  }
+}
