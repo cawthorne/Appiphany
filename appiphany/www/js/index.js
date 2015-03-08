@@ -135,7 +135,10 @@ function getData(){
       url: url, dataType: 'json', success: function(result){
       for(var i in result.data){
 			  var item = result.data[i];
-			  createMarker(item.lat, item.lng, item.user_id, item.vote, item.text, item.id);
+        $.ajax({
+          url: 'http://appiphany.herokuapp.com/getuser?id='+item.user_id, dataType:'json', success: function(r) {
+            createMarker(item.lat, item.lng, r.data.name, item.vote, item.text, item.id);
+          }});
       }
       popupCenterMarker();
     }});
