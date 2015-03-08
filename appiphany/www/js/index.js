@@ -1,5 +1,6 @@
 // MAP FUNCTIONS
 var map;
+var _vote
 var userPos = new L.LatLng(0,0);
 //https://www.mapbox.com/developers/api/
 var onSuccess = function(position) {
@@ -31,7 +32,7 @@ $('#submit-button').click(function() {
   leaflet_m = addMarkerToMap(userPos.lat, userPos.lng, userName);
   var m = {
   lat: userPos.lat,
-  vote: 1,
+  vote: _vote,
   lng: userPos.lng,
   name: userName,
   id: _id,
@@ -45,6 +46,13 @@ $('#control-icon img').attr('src','img/down.png');
 pushData(m);
 });
 
+$('#thumb1').click(function() {
+	_vote = 1;
+});
+
+$('#thumb2').click(function() {
+	_vote = 0;
+});
 
 L.tileLayer('http://{s}.tiles.mapbox.com/v4/mc13818.l2a71g35/{z}/{x}/{y}.png'.concat(accToken), {
     maxZoom: 18,
