@@ -19,14 +19,27 @@ var markers = new Object();
 var openmarker;
 var userName = "Simon Hollis";
 var _id = 10;
-
-map = L.map('map-layer', {
-    attributionControl: false,
-    zoomControl:false,
-    center: [51.396, -2.298],
-    zoom: 14,
-    minZoom: 8
-});
+function initMap() {
+  map = L.map('map-layer', {
+      attributionControl: false,
+      zoomControl:false,
+      center: [51.396, -2.298],
+      zoom: 14,
+      minZoom: 8
+  });
+  
+  L.tileLayer('http://{s}.tiles.mapbox.com/v4/mc13818.l2a71g35/{z}/{x}/{y}.png'.concat(accToken), {
+    maxZoom: 18,
+		reuseTiles: true,
+    detectRetina: true,
+		unloadInvisibleTiles: false
+  }).addTo(map);
+  getData();
+  
+  map.on('moveend', function(){
+    getData();
+  });
+}
 
 $('#submit-button').click(function() {
   leaflet_m = addMarkerToMap(userPos.lat, userPos.lng, userName);
@@ -54,25 +67,12 @@ $('#thumb2').click(function() {
 	_vote = 0;
 });
 
-L.tileLayer('http://{s}.tiles.mapbox.com/v4/mc13818.l2a71g35/{z}/{x}/{y}.png'.concat(accToken), {
-    maxZoom: 18,
-		reuseTiles: true,
-    detectRetina: true,
-		unloadInvisibleTiles: false
-}).addTo(map);
-
 //custom marker
 var markerIcon = L.icon({
     iconUrl: 'img/marker.png',
     iconSize: [25, 25],
     iconAnchor: [12.5, 12.5],
     popupAnchor: [0, -15],
-});
-
-getData();
-
-map.on('moveend', function(){
-  getData();
 });
 
 function o(v){
@@ -216,4 +216,5 @@ $('#signin-button').click(function() {
   $('#button-layer').show();
   $('#control-icon').show();
   $('#sign-in-layer').hide();
+  initMap();
 });
