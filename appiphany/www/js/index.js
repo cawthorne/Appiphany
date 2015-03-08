@@ -6,6 +6,8 @@ var map;
 
 var accToken = '?access_token=pk.eyJ1IjoibWMxMzgxOCIsImEiOiI4Tlp2cFlBIn0.reMspV4lEYawDlSZ6U1fqQ';
 var markers = new Object();
+var userName = "Simon Hollis";
+var _id = 10;
 
 map = L.map('map-layer', {
     attributionControl: false,
@@ -30,27 +32,54 @@ var markerIcon = L.icon({
     popupAnchor: [0, -15],
 });
 
+getData();
+
 map.on('click', function(e) {
-    createMarker(e.latlng.lat, e.latlng.lng, "Mike Christensen", "Hello, World!");
+    leaflet_m = addMarkerToMap(e.latlng.lat, e.latlng.lng, userName);
+	var m = {
+		lat: e.latlng.lat,
+		vote: 1,
+		lng: e.latlng.lng,
+		name: userName,
+		id: _id,
+		msg: "quack",
+		leaflet_marker: leaflet_m
+	};
+	pushData(m);
 });
 
 map.on('moveend', function(){
-    //getData();
-    popupCenterMarker();
+	popupCenterMarker();
+    getData();
 });
 
-function createMarker(latitude, longitude, _name, type, message, id) {
-	
+function o(v){
+		console.log(JSON.stringify(v));
+}
+
+function deleteAllNotes(){ //not working
+	var k = Object.keys(markers);
+	for (var i = 0; i < k.length; i++){
+		deleteNote(k[i]);
+		map.removeLayer(markers[k[i]].leaflet_marker);
+		delete markers[k[i]];
+	}
+}
+
+function createMarker(latitude, longitude, _name, _vote, message, id) {
 	if (!markers.hasOwnProperty(id)) {
 		leaflet_m = addMarkerToMap(latitude, longitude, _name);
 		var m = {
 			lat: latitude,
+			vote: _vote,
 			lng: longitude,
 			name: _name,
+			id: _id,
 			msg: message,
 			leaflet_marker: leaflet_m
 		};
 		markers[id] = m;
+		o(Object.keys(markers).length);
 	}
 }
 
@@ -66,29 +95,38 @@ function popupCenterMarker() {
   for (var m in markers) {
     m.leaflet_marker.closePopup();
   }
-  
   var centre = getCenterMarker();
   if (centre){
 	  centre.leaflet_marker.openPopup();
   }
 }
 
-function getData(){
-    
-    var domain ='https://appiphany.herokuapp.com';
-
-    var box = {
-      bbox: map.getBounds().toBBoxString()
-    };
-    var url = domain + L.Util.getParamString(box);
-
+function deleteNote(id){
+	 var domain ='http://appiphany.herokuapp.com/removenote?';
+	var url = domain + 'id=' + id;
     $.ajax({
-        url: url, success: function(result){
-        for(var i =0;i < result.length-1;i++)
-	{
-		var item = itemData[i];
-		createMarker(item.lat, item.lng, item.user_id, item.vote, item.text, item.id);
-	}
+        url: url,  dataType: 'json'});
+}
+
+function pushData(note){
+	 var domain ='http://appiphany.herokuapp.com/addnote?';
+	var url = domain + 'user_id=' + 1 + '&text=' + note.msg + '&vote=' + note.vote + '&lat=' + note.lat + '&lng=' + note.lng;
+    $.ajax({
+        url: url,  dataType: 'json', success: function(result){
+        markers[result.data] = note;
+    }});
+}
+
+function getData(){
+    var domain ='http://appiphany.herokuapp.com/getnotes?';
+	var bounds = map.getBounds();
+	var url = domain + 'lat1=' + bounds._southWest.lat + '&' + 'lng1=' + bounds._southWest.lng + '&' + 'lat2=' + bounds._northEast.lat + '&' + 'lng2=' + bounds._northEast.lng;
+    $.ajax({
+        url: url, dataType: 'json', success: function(result){
+        for(var i = 0; i < result.data.length; i++){
+			var item = result.data[i];
+			createMarker(item.lat, item.lng, item.user_id, item.vote, item.text, item.id);
+		}
     }});
 };
 
