@@ -68,6 +68,8 @@ $('#submit-button').click(function() {
 	$('#control-icon img').attr('src','img/down.png');
 	pushData(m);
 	_vote = 2;
+	$('#thumb2 img').attr('src','img/thumb_down.png');
+	$('#thumb1 img').attr('src','img/thumb_up.png');
   }
 });
 
