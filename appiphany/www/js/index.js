@@ -1,6 +1,6 @@
 // MAP FUNCTIONS
 var map;
-var _vote
+var _vote = 2;
 var userPos = new L.LatLng(0,0);
 //https://www.mapbox.com/developers/api/
 var onSuccess = function(position) {
@@ -52,27 +52,42 @@ $('#signin-button').click(function() {
 })
 $('#submit-button').click(function() {
   leaflet_m = addMarkerToMap(userPos.lat, userPos.lng, userName);
-  var m = {
-  lat: userPos.lat,
-  vote: _vote,
-  lng: userPos.lng,
-  name: userName,
-  id: _id,
-  msg: $('#message-input').val(),
-  leaflet_marker: leaflet_m
-};
-$('#add-message-layer').slideUp();
-$('#banner-layer').slideDown();
-$('#button-layer').fadeIn();
-$('#control-icon img').attr('src','img/down.png');
-pushData(m);
+  if (($('#message-input').val() != '' && _vote != 2)){
+	var m = {
+		lat: userPos.lat,
+		vote: _vote,
+		lng: userPos.lng,
+		name: userName,
+		id: _id,
+		msg: $('#message-input').val(),
+		leaflet_marker: leaflet_m
+	};
+	$('#add-message-layer').slideUp();
+	$('#banner-layer').slideDown();
+	$('#button-layer').fadeIn();
+	$('#control-icon img').attr('src','img/down.png');
+	pushData(m);
+	_vote = 2;
+  }
 });
+
+function inv(v){
+	if (v == 0){
+		return 1;
+	} else {
+		return 0
+	}
+}
 
 $('#thumb1').click(function() {
 	_vote = 1;
+	$('#thumb1 img').attr('src','img/thumb_up_green.png');
+	$('#thumb2 img').attr('src','img/thumb_down.png');
 });
 
 $('#thumb2').click(function() {
+	$('#thumb2 img').attr('src','img/thumb_down_red.png');
+	$('#thumb1 img').attr('src','img/thumb_up.png');
 	_vote = 0;
 });
 
