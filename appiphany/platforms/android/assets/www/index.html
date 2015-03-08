@@ -21,8 +21,8 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-        <meta name="author" content="Licence to Code" /> 
-        <meta name="description" content="" /> 
+        <meta name="author" content="Licence to Code" />
+        <meta name="description" content="" />
         <meta name="keywords" content="" />
         <link rel="shortcut icon" type="image/png" href="" />
         <!--LEAFLET CSS-->
@@ -30,6 +30,7 @@
         <!-- PAGE CSS -->
         <link rel="stylesheet" type="text/css" href="css/fonts.css">
         <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/index-responsive.css">
         <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
         <title>Appiphany</title>
     </head>
@@ -47,14 +48,14 @@
               <div class="speechbox-nub"><img src="img/speechbox_nub.png"></div>
             </div>
           </div>
-          <div class="message-section">
+          <div class="message-section"><div id="message">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet nisi diam. Maecenas tempus eu metus a elementum. Donec tempus semp.
-          </div>
+          </div></div>
         </div>
         <div id="button-layer">
           <div id="button-add"><img src="img/buttons/add.png"></div>
         </div>
-        
+
         <div id="add-message-layer">
           <div class="main-section" id="profile-main-section">
             <div id="profile-img" class="main-graphic"><img src="img/profiles/profile1.jpg"></div>
@@ -75,10 +76,18 @@
             <div id="submit-button" class="text-button">MAKE YOUR MARK</div>
           </div>
         </div>
-        
+
+        <div id="sign-in-layer">
+          <div id="logo"><img src="img/logo_small.png"></div>
+          <div id="sign-in-label" class="title">Sign In</div>
+          <div id="username">
+            <input id="login-input" type="text" placeholder="Username">
+          </div>
+          <div id="slogan" class="title">Let the world know where the fun is at.</div>
+          <div id="signin-button" class="text-button">DIVE IN</div>
+        </div>
+
         <div id="map-layer"></div>
-        
-        
         <!-- JQUERY -->
         <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
         <!-- LEAFLET JS -->

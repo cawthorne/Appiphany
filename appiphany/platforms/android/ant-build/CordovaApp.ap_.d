@@ -56,13 +56,18 @@
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/buttons \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/close.png \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/down.png \
+/Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/logo.png \
+/Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/logo_small.png \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/marker.png \
+/Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/marker_white.png \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/plus.png \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/plus_black.png \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/profiles \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/speechbox_nub.png \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/thumb_down.png \
+/Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/thumb_down_red.png \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/thumb_up.png \
+/Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/thumb_up_green.png \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/up.png \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/wine.png \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/buttons/add.png \
@@ -71,5 +76,6 @@
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/profiles/profile2.jpg \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/profiles/profile3.jpg \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/profiles/profile4.jpg \
+/Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/js/heatmap.min.js \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/js/index.js \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/ant-build/AndroidManifest.xml \

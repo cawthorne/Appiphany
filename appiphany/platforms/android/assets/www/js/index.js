@@ -1,5 +1,6 @@
 // MAP FUNCTIONS
 var map;
+var _vote = 2;
 var userPos = new L.LatLng(0,0);
 //https://www.mapbox.com/developers/api/
 var onSuccess = function(position) {
@@ -12,45 +13,83 @@ function onError(error) {
           'message: ' + error.message + '\n');
 }
 
-navigator.geolocation.getCurrentPosition(onSuccess, onError);
+
 var accToken = '?access_token=pk.eyJ1IjoibWMxMzgxOCIsImEiOiI4Tlp2cFlBIn0.reMspV4lEYawDlSZ6U1fqQ';
 var markers = new Object();
+var openmarker;
 var userName = "Simon Hollis";
 var _id = 10;
+function initMap() {
 
-map = L.map('map-layer', {
-    attributionControl: false,
-    zoomControl:false,
-    center: [51.396, -2.298],
-    zoom: 14,
-    minZoom: 8
-});
-
-$('#submit-button').click(function() {
-  leaflet_m = addMarkerToMap(userPos.lat, userPos.lng, userName);
-var m = {
-  lat: userPos.lat,
-  vote: 1,
-  lng: userPos.lng,
-  name: userName,
-  id: _id,
-  msg: $('#message-input').text(),
-  leaflet_marker: leaflet_m
-};
-$('#add-message-layer').slideUp();
-$('#banner-layer').slideDown();
-$('#button-layer').fadeIn();
-$('#control-icon img').attr('src','img/down.png');
-pushData(m);
-});
-
-
-L.tileLayer('http://{s}.tiles.mapbox.com/v4/mc13818.l2a71g35/{z}/{x}/{y}.png'.concat(accToken), {
+  map = L.map('map-layer', {
+      attributionControl: false,
+      zoomControl:false,
+      center: [51.396, -2.298],
+      zoom: 14,
+      minZoom: 8
+  });
+  navigator.geolocation.getCurrentPosition(onSuccess, onError);
+  L.tileLayer('http://{s}.tiles.mapbox.com/v4/mc13818.l2a71g35/{z}/{x}/{y}.png'.concat(accToken), {
     maxZoom: 18,
 		reuseTiles: true,
     detectRetina: true,
 		unloadInvisibleTiles: false
-}).addTo(map);
+  }).addTo(map);
+  getData();
+
+  map.on('moveend', function(){
+    getData();
+  });
+}
+$('#signin-button').click(function() {
+  userName = $("#login-input").val();
+  $.ajax({
+      url: 'http://appiphany.herokuapp.com/adduser?name='+userName, dataType: 'json', success: function(result){
+        _id = result.data;
+      }
+    });
+
+})
+$('#submit-button').click(function() {
+  leaflet_m = addMarkerToMap(userPos.lat, userPos.lng, userName);
+  if (($('#message-input').val() != '' && _vote != 2)){
+	var m = {
+		lat: userPos.lat,
+		vote: _vote,
+		lng: userPos.lng,
+		name: userName,
+		id: _id,
+		msg: $('#message-input').val(),
+		leaflet_marker: leaflet_m
+	};
+	$('#add-message-layer').slideUp();
+	$('#banner-layer').slideDown();
+	$('#button-layer').fadeIn();
+	$('#control-icon img').attr('src','img/down.png');
+	pushData(m);
+	_vote = 2;
+  }
+});
+
+function inv(v){
+	if (v == 0){
+		return 1;
+	} else {
+		return 0
+	}
+}
+
+$('#thumb1').click(function() {
+	_vote = 1;
+	$('#thumb1 img').attr('src','img/thumb_up_green.png');
+	$('#thumb2 img').attr('src','img/thumb_down.png');
+});
+
+$('#thumb2').click(function() {
+	$('#thumb2 img').attr('src','img/thumb_down_red.png');
+	$('#thumb1 img').attr('src','img/thumb_up.png');
+	_vote = 0;
+});
 
 //custom marker
 var markerIcon = L.icon({
@@ -58,13 +97,6 @@ var markerIcon = L.icon({
     iconSize: [25, 25],
     iconAnchor: [12.5, 12.5],
     popupAnchor: [0, -15],
-});
-
-getData();
-
-map.on('moveend', function(){
-	popupCenterMarker();
-    getData();
 });
 
 function o(v){
@@ -81,7 +113,7 @@ function deleteAllNotes(){ //not working
 }
 
 function createMarker(latitude, longitude, _name, _vote, message, id) {
-	if (!markers.hasOwnProperty(id)) {
+  if (!markers.hasOwnProperty(id)) {
 		leaflet_m = addMarkerToMap(latitude, longitude, _name);
 		var m = {
 			lat: latitude,
@@ -93,25 +125,26 @@ function createMarker(latitude, longitude, _name, _vote, message, id) {
 			leaflet_marker: leaflet_m
 		};
 		markers[id] = m;
-		o(Object.keys(markers).length);
-	}
+  }
 }
 
 function addMarkerToMap(lat, lng, name) {
   m = L.marker([lat, lng], {icon: markerIcon});
   m.addTo(map)
     .bindPopup('<div class="popup"><div id = "profile_img"><img src="img/profiles/profile1.jpg"></div><div id = "profile_name">'+name+'</div></div>')
-    .openPopup();
   return m;
 }
 
 function popupCenterMarker() {
-  for (var m in markers) {
-    m.leaflet_marker.closePopup();
-  }
+
   var centre = getCenterMarker();
+
   if (centre){
 	  centre.leaflet_marker.openPopup();
+    openmarker = centre;
+    $('#message-short').text(centre.msg);
+    $('#message').text(centre.msg);
+    $('#profile-name').text(userName);
   }
 }
 
@@ -124,7 +157,7 @@ function deleteNote(id){
 
 function pushData(note){
 	 var domain ='http://appiphany.herokuapp.com/addnote?';
-	var url = domain + 'user_id=' + 1 + '&text=' + note.msg + '&vote=' + note.vote + '&lat=' + note.lat + '&lng=' + note.lng;
+	var url = domain + 'user_id=' + _id + '&text=' + note.msg + '&vote=' + note.vote + '&lat=' + note.lat + '&lng=' + note.lng;
     $.ajax({
         url: url,  dataType: 'json', success: function(result){
         markers[result.data] = note;
@@ -136,47 +169,30 @@ function getData(){
 	var bounds = map.getBounds();
 	var url = domain + 'lat1=' + bounds._southWest.lat + '&' + 'lng1=' + bounds._southWest.lng + '&' + 'lat2=' + bounds._northEast.lat + '&' + 'lng2=' + bounds._northEast.lng;
     $.ajax({
-        url: url, dataType: 'json', success: function(result){
-        for(var i = 0; i < result.data.length; i++){
-			var item = result.data[i];
-			createMarker(item.lat, item.lng, item.user_id, item.vote, item.text, item.id);
-		}
+      url: url, dataType: 'json', success: function(result){
+      for(var i in result.data){
+			  var item = result.data[i];
+        createMarker(item.lat, item.lng, item.user_name, item.vote, item.text, item.id);
+      }
+      popupCenterMarker();
     }});
 };
 
 function calcDistance(p1, p2)  {
-  //http://www.movable-type.co.uk/scripts/latlong.html
-  var R = 6371000; // metres (radius of Earth)
-  var phi1 = toRadians(p1.lat);
-  var phi2 = toRadians(p2.lat);
-  var delta_phi = toRadians(p2.lat-p1.lat);
-  var delta_lambda = toRadians(p2.lng-p1.lng);
-
-  var a = Math.sin(delta_phi/2) * Math.sin(delta_phi/2) +
-          Math.cos(phi1) * Math.cos(phi2) *
-          Math.sin(delta_lambda/2) * Math.sin(delta_lambda/2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  var d = R * c;
-  return d;
+  return Math.sqrt((p2.lat-p1.lat)*(p2.lat-p1.lat) +
+                   (p2.lng-p1.lng)*(p2.lng-p1.lng));
 }
 
 function getCenterMarker() {
   var center = map.getCenter();
   var min_i = 0;
-   var min_dist;
-   var centreMarker;
-  for (var first in markers) {
-	min_dist = calcDistance(center,first);
-    centreMarker = first;
-	break;
-}
-
-  for (var m in markers){
-    var dist = calcDistance(center,m);
-    if(dist < min_dist) {
-		centreMarker = m;
+  var min_dist = 9999;
+  var centreMarker;
+  for (var m in markers) {
+  	dist = calcDistance(center,markers[m]);
+    if (dist < min_dist) {
       min_dist = dist;
-      min_i = i;
+      centreMarker = markers[m];
     }
   }
   return centreMarker;
@@ -187,20 +203,26 @@ function toRadians(degrees) {
   return degrees * Math.PI / 180;
 };
 
+
+var mq = window.matchMedia( "only screen and (max-width: 320px)" );
 $('#control-icon').click(function() {
   if($('#control-icon img').attr('src') == 'img/down.png') {
     $('#banner-layer').css('display','none');
-    $('#view-message-layer').slideDown();
+    $('#view-message-layer').css('display','block');
     $('#map-layer').css('height', '40%');
     $('#control-icon img').attr('src', 'img/up.png');
   } else if($('#control-icon img').attr('src') == 'img/up.png') {
     $('#banner-layer').slideDown();
     $('#view-message-layer').slideUp();
-    $('#map-layer').css('height', 'calc(100% - 75px)');
+    if(mq.matches) {
+      $('#map-layer').css('height', 'calc(100% - 60px)');
+    } else {
+      $('#map-layer').css('height', 'calc(100% - 80px)');
+    }
     $('#control-icon img').attr('src', 'img/down.png');
   } else {
-    $('#add-message-layer').slideUp();
-    $('#banner-layer').slideDown();
+    $('#add-message-layer').hide();
+    $('#banner-layer').fadeIn();
     $('#button-layer').fadeIn();
     $('#control-icon img').attr('src','img/down.png');
   }
@@ -208,13 +230,25 @@ $('#control-icon').click(function() {
 
 $('#button-add').click(function() {
   if($('#control-icon img').attr('src') == 'img/up.png') {
-    $('#banner-layer').slideDown();
-    $('#view-message-layer').slideUp();
-    $('#map-layer').css('height', 'calc(100% - 75px)');
+    $('#view-message-layer').hide();
+    if(mq.matches) {
+      $('#map-layer').css('height', 'calc(100% - 60px)');
+    } else {
+      $('#map-layer').css('height', 'calc(100% - 80px)');
+    }
     $('#control-icon img').attr('src', 'img/down.png');
   }
-  $('#add-message-layer').slideDown();
-  $('#banner-layer').css('display','none');
-  $('#button-layer').fadeOut();
+  $('#add-message-layer').fadeIn();
+  $('#banner-layer').hide();
+  $('#button-layer').hide();
   $('#control-icon img').attr('src','img/close.png');
+});
+
+$('#signin-button').click(function() {
+  $('#banner-layer').show();
+  $('#map-layer').show();
+  $('#button-layer').show();
+  $('#control-icon').show();
+  $('#sign-in-layer').hide();
+  initMap();
 });
