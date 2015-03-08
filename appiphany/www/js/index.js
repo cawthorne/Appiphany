@@ -9,7 +9,7 @@ var onSuccess = function(position) {
 };
 
 function onError(error) {
-    alert('code: '    + error.code    + '\n' +
+    console.log('code: '    + error.code    + '\n' +
           'message: ' + error.message + '\n');
 }
 
@@ -59,7 +59,7 @@ function initMap() {
 
 function updateHeat() {
   for(var m in markers) {
-    if(markers[m].vote == 1) {
+    if(markers[m].vote == 0) {
       heat_red.addLatLng(L.latLng(markers[m].lat, markers[m].lng));
     } else {
       heat_green.addLatLng(L.latLng(markers[m].lat, markers[m].lng));
@@ -171,7 +171,13 @@ function updateMessageBanner(m) {
   $('#message').text(m.msg);
   $('#profile-name').text(userName);
   $('#post-time').text('Posted '+m.age+' minutes ago');
-  alert(m.vote);
+  if(m.vote) {
+    $('#banner-thumb img').attr('src', 'img/thumb_up_green.png');
+    $('#thumb-icon img').attr('src', 'img/thumb_up_green.png');
+  } else {
+    $('#banner-thumb img').attr('src', 'img/thumb_down_red.png');
+    $('#thumb-icon img').attr('src', 'img/thumb_down_red.png');
+  }
 }
 
 function deleteNote(id){
