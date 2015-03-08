@@ -76,6 +76,5 @@
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/profiles/profile2.jpg \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/profiles/profile3.jpg \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/profiles/profile4.jpg \
-/Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/js/heatmap.min.js \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/js/index.js \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/ant-build/AndroidManifest.xml \

@@ -68,6 +68,9 @@ $('#submit-button').click(function() {
 	$('#control-icon img').attr('src','img/down.png');
 	pushData(m);
 	_vote = 2;
+	$('#thumb2 img').attr('src','img/thumb_down.png');
+	$('#thumb1 img').attr('src','img/thumb_up.png');
+	$('#message-input').val('');
   }
 });
 
@@ -112,14 +115,16 @@ function deleteAllNotes(){ //not working
 	}
 }
 
-function createMarker(latitude, longitude, _name, _vote, message, id) {
+function createMarker(latitude, longitude, date, _name, _vote, message, id) {
   if (!markers.hasOwnProperty(id)) {
+
 		leaflet_m = addMarkerToMap(latitude, longitude, _name);
 		var m = {
 			lat: latitude,
 			vote: _vote,
 			lng: longitude,
 			name: _name,
+      age: Math.floor(((Date.now() - Date.parse(date))/1000)/60),
 			id: _id,
 			msg: message,
 			leaflet_marker: leaflet_m
@@ -145,6 +150,7 @@ function popupCenterMarker() {
     $('#message-short').text(centre.msg);
     $('#message').text(centre.msg);
     $('#profile-name').text(userName);
+    $('#post-time').text('Posted '+centre.age+' minutes ago');
   }
 }
 
@@ -172,7 +178,7 @@ function getData(){
       url: url, dataType: 'json', success: function(result){
       for(var i in result.data){
 			  var item = result.data[i];
-        createMarker(item.lat, item.lng, item.user_name, item.vote, item.text, item.id);
+        createMarker(item.lat, item.lng, item.date, item.user_name, item.vote, item.text, item.id);
       }
       popupCenterMarker();
     }});
