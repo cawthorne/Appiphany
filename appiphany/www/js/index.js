@@ -111,6 +111,7 @@ function popupCenterMarker() {
 	  centre.leaflet_marker.openPopup();
     openmarker = centre;
     $('#message-short').text(centre.msg);
+    $('.message-section').text(centre.msg);
   }
 }
 
