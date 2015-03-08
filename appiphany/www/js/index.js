@@ -13,13 +13,14 @@ function onError(error) {
           'message: ' + error.message + '\n');
 }
 
-navigator.geolocation.getCurrentPosition(onSuccess, onError);
+
 var accToken = '?access_token=pk.eyJ1IjoibWMxMzgxOCIsImEiOiI4Tlp2cFlBIn0.reMspV4lEYawDlSZ6U1fqQ';
 var markers = new Object();
 var openmarker;
 var userName = "Simon Hollis";
 var _id = 10;
 function initMap() {
+
   map = L.map('map-layer', {
       attributionControl: false,
       zoomControl:false,
@@ -27,7 +28,7 @@ function initMap() {
       zoom: 14,
       minZoom: 8
   });
-  
+  navigator.geolocation.getCurrentPosition(onSuccess, onError);
   L.tileLayer('http://{s}.tiles.mapbox.com/v4/mc13818.l2a71g35/{z}/{x}/{y}.png'.concat(accToken), {
     maxZoom: 18,
 		reuseTiles: true,
@@ -35,12 +36,20 @@ function initMap() {
 		unloadInvisibleTiles: false
   }).addTo(map);
   getData();
-  
+
   map.on('moveend', function(){
     getData();
   });
 }
+$('#signin-button').click(function() {
+  userName = $("#login-input").val();
+  $.ajax({
+      url: 'http://appiphany.herokuapp.com/adduser?name='+userName, dataType: 'json', success: function(result){
+        _id = result.data;
+      }
+    });
 
+})
 $('#submit-button').click(function() {
   leaflet_m = addMarkerToMap(userPos.lat, userPos.lng, userName);
   var m = {
@@ -120,6 +129,7 @@ function popupCenterMarker() {
     openmarker = centre;
     $('#message-short').text(centre.msg);
     $('#message').text(centre.msg);
+    $('#profile-name').text(centre.name);
   }
 }
 
@@ -132,7 +142,7 @@ function deleteNote(id){
 
 function pushData(note){
 	 var domain ='http://appiphany.herokuapp.com/addnote?';
-	var url = domain + 'user_id=' + 1 + '&text=' + note.msg + '&vote=' + note.vote + '&lat=' + note.lat + '&lng=' + note.lng;
+	var url = domain + 'user_id=' + _id + '&text=' + note.msg + '&vote=' + note.vote + '&lat=' + note.lat + '&lng=' + note.lng;
     $.ajax({
         url: url,  dataType: 'json', success: function(result){
         markers[result.data] = note;
