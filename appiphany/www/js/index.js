@@ -80,7 +80,7 @@ function deleteAllNotes(){ //not working
 }
 
 function createMarker(latitude, longitude, _name, _vote, message, id) {
-
+  if (!markers.hasOwnProperty(id)) {
 		leaflet_m = addMarkerToMap(latitude, longitude, _name);
 		var m = {
 			lat: latitude,
@@ -92,7 +92,7 @@ function createMarker(latitude, longitude, _name, _vote, message, id) {
 			leaflet_marker: leaflet_m
 		};
 		markers[id] = m;
-
+  }
 }
 
 function addMarkerToMap(lat, lng, name) {
