@@ -200,7 +200,15 @@ $('#button-add').click(function() {
     $('#control-icon img').attr('src', 'img/down.png');
   }
   $('#add-message-layer').slideDown();
-  $('#banner-layer').css('display','none');
+  $('#banner-layer').hide();
   $('#button-layer').fadeOut();
   $('#control-icon img').attr('src','img/close.png');
+});
+
+$('#signin-button').click(function() {
+  $('#banner-layer').show();
+  $('#map-layer').show();
+  $('#button-layer').show();
+  $('#control-icon').show();
+  $('#sign-in-layer').hide();
 });
