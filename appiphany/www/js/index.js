@@ -15,6 +15,7 @@ function onError(error) {
 navigator.geolocation.getCurrentPosition(onSuccess, onError);
 var accToken = '?access_token=pk.eyJ1IjoibWMxMzgxOCIsImEiOiI4Tlp2cFlBIn0.reMspV4lEYawDlSZ6U1fqQ';
 var markers = new Object();
+var openmarker;
 var userName = "Simon Hollis";
 var _id = 10;
 
@@ -108,6 +109,8 @@ function popupCenterMarker() {
 
   if (centre){
 	  centre.leaflet_marker.openPopup();
+    openmarker = centre;
+    $('#message-short').text(centre.msg);
   }
 }
 
@@ -135,10 +138,7 @@ function getData(){
       url: url, dataType: 'json', success: function(result){
       for(var i in result.data){
 			  var item = result.data[i];
-        $.ajax({
-          url: 'http://appiphany.herokuapp.com/getuser?id='+item.user_id, dataType:'json', success: function(r) {
-            createMarker(item.lat, item.lng, r.data.name, item.vote, item.text, item.id);
-          }});
+        createMarker(item.lat, item.lng, item.user_name, item.vote, item.text, item.id);
       }
       popupCenterMarker();
     }});
