@@ -15,6 +15,10 @@ img {
   height: 100%;
 }
 
+.leaflet-heatmap-layer {
+  opacity: 0.5;
+}
+
 .clearfix {
   clear: both;
 }

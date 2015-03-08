@@ -38,6 +38,7 @@
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/js \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/plugins \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/css/fonts.css \
+/Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/css/index-responsive.css \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/css/index.css \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/fonts/OpenSans-Bold.ttf \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/fonts/OpenSans-Bold.woff \
@@ -68,6 +69,7 @@
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/thumb_down_red.png \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/thumb_up.png \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/thumb_up_green.png \
+/Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/transparent.png \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/up.png \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/wine.png \
 /Users/samcordingley/development/appiphany/appiphany/platforms/android/assets/www/img/buttons/add.png \

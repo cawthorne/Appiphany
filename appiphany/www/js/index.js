@@ -37,7 +37,7 @@ function initMap() {
     detectRetina: true,
 		unloadInvisibleTiles: false
   }).addTo(map);
-  
+
   map.on('popupopen', function(e) {
     var marker = e.popup._source;
     for(var m in markers) {
@@ -46,12 +46,12 @@ function initMap() {
       }
     }
   });
-  
+
   getData();
-  
+
   heat_red = L.heatLayer([], {minOpacity: 0, radius: 25, gradient: {0: '#ff0000', 1: '#ff0000'}}).addTo(map);
   heat_green = L.heatLayer([], {minOpacity: 0,radius: 25, gradient: {0: '#00ff00', 1: '#00ff00'}}).addTo(map);
-  
+
   map.on('moveend', function(){
     getData();
   });
@@ -65,10 +65,12 @@ function updateHeat() {
       heat_green.addLatLng(L.latLng(markers[m].lat, markers[m].lng));
     }
   }
+
 }
 
 $('#signin-button').click(function() {
   userName = $("#login-input").val();
+  $("#profile-name").text(userName);
   $.ajax({
       url: 'http://appiphany.herokuapp.com/adduser?name='+userName, dataType: 'json', success: function(result){
         _id = result.data;
@@ -196,6 +198,7 @@ function pushData(note){
     }});
 }
 
+
 function getData(){
   var domain ='http://appiphany.herokuapp.com/getnotes?';
 	var bounds = map.getBounds();
@@ -210,6 +213,8 @@ function getData(){
     updateHeat();
   }});
 };
+
+
 
 function calcDistance(p1, p2)  {
   return Math.sqrt((p2.lat-p1.lat)*(p2.lat-p1.lat) +

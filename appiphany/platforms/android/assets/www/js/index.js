@@ -19,12 +19,14 @@ var markers = new Object();
 var openmarker;
 var userName = "Simon Hollis";
 var _id = 10;
+var heat_red;
+var heat_green;
 function initMap() {
 
   map = L.map('map-layer', {
       attributionControl: false,
       zoomControl:false,
-      center: [51.396, -2.298],
+      center: [51.455042, -2.603457],
       zoom: 14,
       minZoom: 8
   });
@@ -35,12 +37,37 @@ function initMap() {
     detectRetina: true,
 		unloadInvisibleTiles: false
   }).addTo(map);
+
+  map.on('popupopen', function(e) {
+    var marker = e.popup._source;
+    for(var m in markers) {
+      if(markers[m].leaflet_marker == marker) {
+        updateMessageBanner(markers[m]);
+      }
+    }
+  });
+
   getData();
+
+  heat_red = L.heatLayer([], {minOpacity: 0, radius: 25, gradient: {0: '#ff0000', 1: '#ff0000'}}).addTo(map);
+  heat_green = L.heatLayer([], {minOpacity: 0,radius: 25, gradient: {0: '#00ff00', 1: '#00ff00'}}).addTo(map);
 
   map.on('moveend', function(){
     getData();
   });
 }
+
+function updateHeat() {
+  for(var m in markers) {
+    if(markers[m].vote == 1) {
+      heat_red.addLatLng(L.latLng(markers[m].lat, markers[m].lng));
+    } else {
+      heat_green.addLatLng(L.latLng(markers[m].lat, markers[m].lng));
+    }
+  }
+
+}
+
 $('#signin-button').click(function() {
   userName = $("#login-input").val();
   $.ajax({
@@ -96,7 +123,7 @@ $('#thumb2').click(function() {
 
 //custom marker
 var markerIcon = L.icon({
-    iconUrl: 'img/marker.png',
+    iconUrl: 'img/transparent.png',
     iconSize: [25, 25],
     iconAnchor: [12.5, 12.5],
     popupAnchor: [0, -15],
@@ -122,7 +149,7 @@ function createMarker(latitude, longitude, date, _name, _vote, message, id) {
 		var m = {
 			lat: latitude,
 			vote: _vote,
-			lng: longitude,
+	 		lng: longitude,
 			name: _name,
       age: Math.floor(((Date.now() - Date.parse(date))/1000)/60),
 			id: _id,
@@ -140,18 +167,12 @@ function addMarkerToMap(lat, lng, name) {
   return m;
 }
 
-function popupCenterMarker() {
-
-  var centre = getCenterMarker();
-
-  if (centre){
-	  centre.leaflet_marker.openPopup();
-    openmarker = centre;
-    $('#message-short').text(centre.msg);
-    $('#message').text(centre.msg);
-    $('#profile-name').text(userName);
-    $('#post-time').text('Posted '+centre.age+' minutes ago');
-  }
+function updateMessageBanner(m) {
+  $('#message-short').text(m.msg);
+  $('#message').text(m.msg);
+  $('#profile-name').text(userName);
+  $('#post-time').text('Posted '+m.age+' minutes ago');
+  alert(m.vote);
 }
 
 function deleteNote(id){
@@ -171,17 +192,18 @@ function pushData(note){
 }
 
 function getData(){
-    var domain ='http://appiphany.herokuapp.com/getnotes?';
+  var domain ='http://appiphany.herokuapp.com/getnotes?';
 	var bounds = map.getBounds();
 	var url = domain + 'lat1=' + bounds._southWest.lat + '&' + 'lng1=' + bounds._southWest.lng + '&' + 'lat2=' + bounds._northEast.lat + '&' + 'lng2=' + bounds._northEast.lng;
-    $.ajax({
-      url: url, dataType: 'json', success: function(result){
-      for(var i in result.data){
-			  var item = result.data[i];
-        createMarker(item.lat, item.lng, item.date, item.user_name, item.vote, item.text, item.id);
-      }
-      popupCenterMarker();
-    }});
+  $.ajax({
+    url: url, dataType: 'json', success: function(result){
+    for(var i in result.data){
+      var item = result.data[i];
+      createMarker(item.lat, item.lng, item.date, item.user_name, item.vote, item.text, item.id);
+    }
+    //popupCenterMarker();
+    updateHeat();
+  }});
 };
 
 function calcDistance(p1, p2)  {
@@ -203,12 +225,6 @@ function getCenterMarker() {
   }
   return centreMarker;
 }
-
-// Converts from degrees to radians.
-function toRadians(degrees) {
-  return degrees * Math.PI / 180;
-};
-
 
 var mq = window.matchMedia( "only screen and (max-width: 320px)" );
 $('#control-icon').click(function() {
@@ -235,6 +251,7 @@ $('#control-icon').click(function() {
 });
 
 $('#button-add').click(function() {
+  navigator.geolocation.getCurrentPosition(onSuccess, onError);
   if($('#control-icon img').attr('src') == 'img/up.png') {
     $('#view-message-layer').hide();
     if(mq.matches) {
