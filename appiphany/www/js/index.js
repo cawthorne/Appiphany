@@ -1,9 +1,18 @@
 // MAP FUNCTIONS
 var map;
-
+var userPos = new L.LatLng(0,0);
 //https://www.mapbox.com/developers/api/
+var onSuccess = function(position) {
+  userPos = new L.LatLng(position.coords.latitude, position.coords.longitude);
+  map.panTo(userPos);
+};
 
+function onError(error) {
+    alert('code: '    + error.code    + '\n' +
+          'message: ' + error.message + '\n');
+}
 
+navigator.geolocation.getCurrentPosition(onSuccess, onError);
 var accToken = '?access_token=pk.eyJ1IjoibWMxMzgxOCIsImEiOiI4Tlp2cFlBIn0.reMspV4lEYawDlSZ6U1fqQ';
 var markers = new Object();
 var userName = "Simon Hollis";
@@ -17,6 +26,25 @@ map = L.map('map-layer', {
     minZoom: 8
 });
 
+$('#submit-button').click(function() {
+  leaflet_m = addMarkerToMap(userPos.lat, userPos.lng, userName);
+var m = {
+  lat: userPos.lat,
+  vote: 1,
+  lng: userPos.lng,
+  name: userName,
+  id: _id,
+  msg: $('#message-input').text(),
+  leaflet_marker: leaflet_m
+};
+$('#add-message-layer').slideUp();
+$('#banner-layer').slideDown();
+$('#button-layer').fadeIn();
+$('#control-icon img').attr('src','img/down.png');
+pushData(m);
+});
+
+
 L.tileLayer('http://{s}.tiles.mapbox.com/v4/mc13818.l2a71g35/{z}/{x}/{y}.png'.concat(accToken), {
     maxZoom: 18,
 		reuseTiles: true,
@@ -24,7 +52,7 @@ L.tileLayer('http://{s}.tiles.mapbox.com/v4/mc13818.l2a71g35/{z}/{x}/{y}.png'.co
 		unloadInvisibleTiles: false
 }).addTo(map);
 
-//custom marker 
+//custom marker
 var markerIcon = L.icon({
     iconUrl: 'img/marker.png',
     iconSize: [25, 25],
@@ -33,20 +61,6 @@ var markerIcon = L.icon({
 });
 
 getData();
-
-map.on('click', function(e) {
-    leaflet_m = addMarkerToMap(e.latlng.lat, e.latlng.lng, userName);
-	var m = {
-		lat: e.latlng.lat,
-		vote: 1,
-		lng: e.latlng.lng,
-		name: userName,
-		id: _id,
-		msg: "quack",
-		leaflet_marker: leaflet_m
-	};
-	pushData(m);
-});
 
 map.on('moveend', function(){
 	popupCenterMarker();
