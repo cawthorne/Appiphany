@@ -106,7 +106,7 @@ function popupCenterMarker() {
 
   var centre = getCenterMarker();
 
-  if (centre.leaflet_marker){
+  if (centre){
 	  centre.leaflet_marker.openPopup();
   }
 }
