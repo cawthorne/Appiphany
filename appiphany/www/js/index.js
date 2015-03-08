@@ -165,6 +165,11 @@ function createMarker(latitude, longitude, date, _name, _vote, message, id) {
 			msg: message,
 			leaflet_marker: leaflet_m
 		};
+	if(_vote == 0) {
+      heat_red.addLatLng(L.latLng(latitude, longitude));
+    } else {
+      heat_green.addLatLng(L.latLng(latitude, longitude));
+    }
 		markers[id] = m;
   }
 }
@@ -218,8 +223,6 @@ function getData(){
       var item = result.data[i];
       createMarker(item.lat, item.lng, item.date, item.user_name, item.vote, item.text, item.id);
     }
-    //popupCenterMarker();
-    updateHeat();
   }});
 };
 
