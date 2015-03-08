@@ -129,7 +129,7 @@ function popupCenterMarker() {
     openmarker = centre;
     $('#message-short').text(centre.msg);
     $('#message').text(centre.msg);
-    $('#profile-name').text(centre.name);
+    $('#profile-name').text(userName);
   }
 }
 
