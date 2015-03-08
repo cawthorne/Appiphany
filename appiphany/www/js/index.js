@@ -19,12 +19,14 @@ var markers = new Object();
 var openmarker;
 var userName = "Simon Hollis";
 var _id = 10;
+var heat_red;
+var heat_green;
 function initMap() {
 
   map = L.map('map-layer', {
       attributionControl: false,
       zoomControl:false,
-      center: [51.396, -2.298],
+      center: [51.455042, -2.603457],
       zoom: 14,
       minZoom: 8
   });
@@ -35,12 +37,42 @@ function initMap() {
     detectRetina: true,
 		unloadInvisibleTiles: false
   }).addTo(map);
+  
+  map.on('popupopen', function(e) {
+    var marker = e.popup._source;
+    for(var m in markers) {
+      if(markers[m].leaflet_marker == marker) {
+        updateMessageBanner(markers[m]);
+      }
+    }
+  });
+  
   getData();
-
+  
+  heat_red = L.heatLayer([], {minOpacity: 0, radius: 25, gradient: {0: '#93ff54', 1: '#ff0000'}}).addTo(map);
+  heat_green = L.heatLayer([], {minOpacity: 0,radius: 25, gradient: {0.2: '#15ff00', 1: '#0be000'}}).addTo(map);
+  
   map.on('moveend', function(){
     getData();
   });
 }
+
+function updateHeat() {
+  console.log(markers);
+  for(var m in markers) {
+    if(markers[m].vote == 1) {
+      heat_red.addLatLng(L.latLng(markers[m].lat, markers[m].lng));
+    } else {
+      heat_green.addLatLng(L.latLng(markers[m].lat, markers[m].lng));
+    }
+    //console.log("" + markers[m].lat + " , " + markers[m].lng);
+  }
+  
+  //heat.addLatLng(L.latLng(51.460180, -2.604050));
+  //heat.addLatLng(L.latLng(51.462854, -2.559161));
+  //heat.addLatLng(L.latLng(51.469163, -2.624478));
+}
+
 $('#signin-button').click(function() {
   userName = $("#login-input").val();
   $.ajax({
@@ -96,7 +128,7 @@ $('#thumb2').click(function() {
 
 //custom marker
 var markerIcon = L.icon({
-    iconUrl: 'img/marker.png',
+    iconUrl: 'img/transparent.png',
     iconSize: [25, 25],
     iconAnchor: [12.5, 12.5],
     popupAnchor: [0, -15],
@@ -138,17 +170,10 @@ function addMarkerToMap(lat, lng, name) {
   return m;
 }
 
-function popupCenterMarker() {
-
-  var centre = getCenterMarker();
-
-  if (centre){
-	  centre.leaflet_marker.openPopup();
-    openmarker = centre;
-    $('#message-short').text(centre.msg);
-    $('#message').text(centre.msg);
-    $('#profile-name').text(userName);
-  }
+function updateMessageBanner(m) {
+  $('#message-short').text(m.msg);
+  $('#message').text(m.msg);
+  $('#profile-name').text(userName);
 }
 
 function deleteNote(id){
@@ -168,17 +193,18 @@ function pushData(note){
 }
 
 function getData(){
-    var domain ='http://appiphany.herokuapp.com/getnotes?';
+  var domain ='http://appiphany.herokuapp.com/getnotes?';
 	var bounds = map.getBounds();
 	var url = domain + 'lat1=' + bounds._southWest.lat + '&' + 'lng1=' + bounds._southWest.lng + '&' + 'lat2=' + bounds._northEast.lat + '&' + 'lng2=' + bounds._northEast.lng;
-    $.ajax({
-      url: url, dataType: 'json', success: function(result){
-      for(var i in result.data){
-			  var item = result.data[i];
-        createMarker(item.lat, item.lng, item.user_name, item.vote, item.text, item.id);
-      }
-      popupCenterMarker();
-    }});
+  $.ajax({
+    url: url, dataType: 'json', success: function(result){
+    for(var i in result.data){
+      var item = result.data[i];
+      createMarker(item.lat, item.lng, item.user_name, item.vote, item.text, item.id);
+    }
+    //popupCenterMarker();
+    updateHeat();
+  }});
 };
 
 function calcDistance(p1, p2)  {
