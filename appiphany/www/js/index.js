@@ -49,8 +49,8 @@ function initMap() {
   
   getData();
   
-  heat_red = L.heatLayer([], {minOpacity: 0, radius: 25, gradient: {0: '#93ff54', 1: '#ff0000'}}).addTo(map);
-  heat_green = L.heatLayer([], {minOpacity: 0,radius: 25, gradient: {0.2: '#15ff00', 1: '#0be000'}}).addTo(map);
+  heat_red = L.heatLayer([], {minOpacity: 0, radius: 25, gradient: {0: '#ff0000', 1: '#ff0000'}}).addTo(map);
+  heat_green = L.heatLayer([], {minOpacity: 0,radius: 25, gradient: {0: '#00ff00', 1: '#00ff00'}}).addTo(map);
   
   map.on('moveend', function(){
     getData();
