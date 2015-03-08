@@ -47,6 +47,14 @@ function initMap() {
     }
   });
 
+  /*map.on('click', onMapClick);
+  function onMapClick(e) {
+    	var domain ='http://appiphany.herokuapp.com/addnote?';
+    	var url = domain + 'user_id=' + 29 + '&text=' + 'Happy days in the park!' + '&vote=' + 1 + '&lat=' + e.latlng.lat + '&lng=' + e.latlng.lng;
+      $.ajax({ url: url,  dataType: 'json', success:function(){alert(JSON.stringify(e.latlng))}});
+
+  }*/
+
   getData();
 
   heat_red = L.heatLayer([], {minOpacity: 0, radius: 25, gradient: {0: '#ff0000', 1: '#ff0000'}}).addTo(map);
@@ -191,12 +199,13 @@ function deleteNote(id){
 
 function pushData(note){
 	 var domain ='http://appiphany.herokuapp.com/addnote?';
-	var url = domain + 'user_id=' + _id + '&text=' + note.msg + '&vote=' + note.vote + '&lat=' + note.lat + '&lng=' + note.lng;
+	  var url = domain + 'user_id=' + _id + '&text=' + note.msg + '&vote=' + note.vote + '&lat=' + note.lat + '&lng=' + note.lng;
     $.ajax({
         url: url,  dataType: 'json', success: function(result){
         markers[result.data] = note;
     }});
 }
+
 
 
 function getData(){
