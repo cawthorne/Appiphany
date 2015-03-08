@@ -152,7 +152,7 @@ img {
   font-family: "Raleway", sans-serif;
   font-size: 1.2em;
   position: relative;
-  top: calc(20px); /*20px for .main-graphic, 10px for itself*/
+  top: 20px; /*20px for .main-graphic, 10px for itself*/
   width: 100%;
   height: auto;
   margin: auto auto;
