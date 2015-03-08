@@ -70,6 +70,7 @@ $('#submit-button').click(function() {
 	_vote = 2;
 	$('#thumb2 img').attr('src','img/thumb_down.png');
 	$('#thumb1 img').attr('src','img/thumb_up.png');
+	$('#message-input').val('');
   }
 });
 
