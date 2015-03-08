@@ -147,14 +147,16 @@ function deleteAllNotes(){ //not working
 	}
 }
 
-function createMarker(latitude, longitude, _name, _vote, message, id) {
+function createMarker(latitude, longitude, date, _name, _vote, message, id) {
   if (!markers.hasOwnProperty(id)) {
+
 		leaflet_m = addMarkerToMap(latitude, longitude, _name);
 		var m = {
 			lat: latitude,
 			vote: _vote,
-			lng: longitude,
+	 		lng: longitude,
 			name: _name,
+      age: Math.floor(((Date.now() - Date.parse(date))/1000)/60),
 			id: _id,
 			msg: message,
 			leaflet_marker: leaflet_m
@@ -174,6 +176,7 @@ function updateMessageBanner(m) {
   $('#message-short').text(m.msg);
   $('#message').text(m.msg);
   $('#profile-name').text(userName);
+  $('#post-time').text('Posted '+m.age+' minutes ago');
 }
 
 function deleteNote(id){
@@ -227,12 +230,6 @@ function getCenterMarker() {
   return centreMarker;
 }
 
-// Converts from degrees to radians.
-function toRadians(degrees) {
-  return degrees * Math.PI / 180;
-};
-
-
 var mq = window.matchMedia( "only screen and (max-width: 320px)" );
 $('#control-icon').click(function() {
   if($('#control-icon img').attr('src') == 'img/down.png') {
@@ -258,6 +255,7 @@ $('#control-icon').click(function() {
 });
 
 $('#button-add').click(function() {
+  navigator.geolocation.getCurrentPosition(onSuccess, onError);
   if($('#control-icon img').attr('src') == 'img/up.png') {
     $('#view-message-layer').hide();
     if(mq.matches) {
