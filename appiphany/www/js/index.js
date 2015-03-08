@@ -138,7 +138,7 @@ function toRadians(degrees) {
 $('#control-icon').click(function() {
   if($('#control-icon img').attr('src') == 'img/down.png') {
     $('#banner-layer').css('display','none');
-    $('#view-message-layer').slideDown();
+    $('#view-message-layer').css('display','block');
     $('#map-layer').css('height', '40%');
     $('#control-icon img').attr('src', 'img/up.png');
   } else if($('#control-icon img').attr('src') == 'img/up.png') {
